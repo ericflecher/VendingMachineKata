@@ -22,6 +22,63 @@ describe('myApp.view1 module', function() {
 
   });
 
+// Accept Coins: As a vendor - https://github.com/ericflecher/VendingMachineKata#as-a-vendor
+
+describe('Scenario: Vending machine should accept coins', function() {
+    var $scope, controller;
+
+    beforeEach(function() {
+      $scope = {};
+      controller = $controller('View1Ctrl', { $scope: $scope });
+    });
+
+    it('Feature: The vending machine will accept valid coins (nickels, dimes, and quarters)', function() {
+
+
+
+
+      expect($scope.alert).toEqual('Accepted!');
+    });
+
+    it('Feature: Reject invalid ones (pennies) And: Rejected coins are placed in the coin return', function() {
+
+
+
+      expect($scope.alert).toEqual('Pennies not accepted. Please check coin return.');
+    });
+
+    it('Feature: When a valid coin is inserted the amount of the coin will be added to the current amount and the display will be updated.', function() {
+
+      $scope.acceptedCoins.nickels = 1;
+      $scope.acceptedCoins.dimes = 2;
+      $scope.acceptedCoins.quarters = 4;
+      $scope.acceptedCoins.pennies = 0;
+
+      expect($scope.totalAmount()).toEqual(1.25);
+    });
+
+    it('When: there are no coins inserted, the machine displays INSERT COIN. Rejected coins are placed in the coin return.', function() {
+
+      $scope.acceptedCoins.nickels = 0;
+      $scope.acceptedCoins.dimes = 0;
+      $scope.acceptedCoins.quarters = 0;
+      $scope.acceptedCoins.pennies = 0;
+
+
+      expect($scope.alert).toEqual('INSERT COIN');
+    });
+
+
+
+
+
+  });
+
+
+
+
+
+///////// testing the unit tests //////////
 
   describe('$scope.grade', function() {
     var $scope, controller;

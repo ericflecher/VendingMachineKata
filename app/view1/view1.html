@@ -1,2 +1,13 @@
-<p>This is the partial for view 1.</p>
-{{test}}
+
+<h1>Vending Machine Kata</h1>
+<button ng-click="processCoin({'dia': 19.05, 'mag': 3})">Penny</button>
+<button ng-click="processCoin({'dia': 21.21, 'mag': 3})">Nickel</button>
+<button ng-click="processCoin({'dia': 17.9, 'mag': 3})">Dime</button>
+<button ng-click="processCoin({'dia': 24.26, 'mag': 3})">Quarter</button>
+<button ng-click="processCoin({'dia': 21.21, 'mag': 0})">Plastic Disk</button>
+<button ng-click="processCoin({'dia': 17.9, 'mag': 1})">Steel Disk</button>
+
+{{alert}}
+{{acceptedCoins}}
+
+<div>Total Amount: {{totalAmount() | currency:currencySymbol}}</div>
