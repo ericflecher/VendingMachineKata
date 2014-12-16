@@ -55,26 +55,32 @@ angular.module('myApp.view1', ['ngRoute'])
 			if(thing.dia == acceptRules.dimesDiaMM)
 			{
 				console.log("dime");
+				$scope.acceptedCoins.dimes += 1;
+				$scope.alert = 'Accepted!';
 			}
 			else if(thing.dia == acceptRules.quartersDiaMM)
 			{
 				console.log("quarter");
+				$scope.acceptedCoins.quarters += 1;
+				$scope.alert = 'Accepted!';
 			}
 			else if(thing.dia == acceptRules.nickelsDiaMM)
 			{
 				console.log("nickel");
+				$scope.acceptedCoins.nickels += 1;
+				$scope.alert = 'Accepted!';
 			}
 			else 
 			{
 				console.log("not accepted return to tray");
+				$scope.alert = 'Not accpeted tender. Check tray and INSERT COIN';
 			}
 		}
 		else
 		{
 			console.log("not a coin");
+			$scope.alert = 'Not accpeted tender. Check tray and INSERT COIN';
 		}
-
-	
 
 	};
 

@@ -34,17 +34,14 @@ describe('Scenario: Vending machine should accept coins', function() {
 
     it('Feature: The vending machine will accept valid coins (nickels, dimes, and quarters)', function() {
 
-
-
-
-      expect($scope.alert).toEqual('Accepted!');
+        $scope.processCoin({'dia': 17.9, 'mag': 3});
+        expect($scope.alert).toEqual('Accepted!');
     });
 
     it('Feature: Reject invalid ones (pennies) And: Rejected coins are placed in the coin return', function() {
 
-
-
-      expect($scope.alert).toEqual('Pennies not accepted. Please check coin return.');
+        $scope.processCoin({'dia': 19.05, 'mag': 3});
+        expect($scope.alert).toEqual('Not accpeted tender. Check tray and INSERT COIN');
     });
 
     it('Feature: When a valid coin is inserted the amount of the coin will be added to the current amount and the display will be updated.', function() {
@@ -67,10 +64,6 @@ describe('Scenario: Vending machine should accept coins', function() {
 
       expect($scope.alert).toEqual('INSERT COIN');
     });
-
-
-
-
 
   });
 
