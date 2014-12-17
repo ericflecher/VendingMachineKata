@@ -102,6 +102,35 @@ describe('Scenario: I want customers to receive correct change So that they will
 
   });
 
+// Make Change: Return Counts - As a customer https://github.com/ericflecher/VendingMachineKata#as-a-customer
+describe('Scenario: I want to have my money returned So that I can change my mind about buying stuff from the vending machine', function() {
+    var $scope, controller;
+
+    beforeEach(function() {
+      $scope = {};
+      controller = $controller('View1Ctrl', { $scope: $scope });
+    });
+
+    it('Feature: When the return coins is selected, the money the customer has placed in the machine is returned and the display shows INSERT COIN.', function() {
+
+
+        $scope.acceptedCoins.nickels = 4;
+        $scope.acceptedCoins.dimes = 2;
+        $scope.acceptedCoins.quarters = 1;
+        $scope.acceptedCoins.pennies = 0;
+
+        $scope.returnCoins();
+
+
+        expect($scope.tray).toEqual(0.65);
+        expect($scope.alert).toEqual("INSERT COIN");
+        
+    });
+
+
+
+  });
+
 
 
 ///////// testing the unit tests //////////
