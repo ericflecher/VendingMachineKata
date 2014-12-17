@@ -34,8 +34,46 @@ angular.module('myApp.view1', ['ngRoute'])
     		};
 })
 
+.service('Products', function () {
+    return { 
+    			'inventory': 
+    				[
+	    				{
+	    					'sku': 1,
+	    					'name': "Tiny Tim: Tip Toe Through the Tulips",
+	    					'iFrame': "<iframe src=\"https://embed.spotify.com/?uri=spotify:track:3LtA6xUfw191QIC9bPjpcU\" width=\"300\" height=\"380\" frameborder=\"0\" allowtransparency=\"true\"></iframe>",
+	    					'price': 20.00,
+	    					'stock': 10
+	    				},
+	    				{
+	    					'sku': 2,
+	    					'name': "Genisis: Invisable Touch",
+	    					'iFrame': "<iframe src=\"https://embed.spotify.com/?uri=spotify:track:0xpBr84T3FTm9j4D1MdPtk\" width=\"300\" height=\"380\" frameborder=\"0\" allowtransparency=\"true\"></iframe>",
+	    					'price': 0.10,
+	    					'stock': 2
+	    				},
+	    				{
+	    					'sku': 3,
+	    					'name': "Phil Collins: Sussuidio",
+	    					'iFrame': "<iframe src=\"https://embed.spotify.com/?uri=spotify:track:07zkNvtcmPOFlMOXbma13k\" width=\"300\" height=\"380\" frameborder=\"0\" allowtransparency=\"true\"></iframe>",
+	    					'price': 0.05,
+	    					'stock': 4
+	    				},
+	    				{
+	    					'sku': 4,
+	    					'name': "John Parr: St. Elmos Fire",
+	    					'iFrame': "<iframe src=\"https://embed.spotify.com/?uri=spotify:track:1A2PWRltFrX8iB8IP3CUgo\" width=\"300\" height=\"380\" frameborder=\"0\" allowtransparency=\"true\"></iframe>",
+	    					'price': 0.55,
+	    					'stock': 4
+	    				}
+    				]
 
-.controller('View1Ctrl', ['$scope', 'Alert', 'AcceptedCoins', 'AcceptRules', function($scope, Alert, AcceptedCoins, AcceptRules) {
+
+    		};
+})
+
+
+.controller('View1Ctrl', ['$scope','$sce', 'Alert', 'AcceptedCoins', 'AcceptRules', 'Products', function($scope, $sce, Alert, AcceptedCoins, AcceptRules, Products) {
 
 	//set currance symbol
 	$scope.currencySymbol = 'USD$';
@@ -43,6 +81,13 @@ angular.module('myApp.view1', ['ngRoute'])
 	$scope.alert = Alert;
 	$scope.acceptedCoins = AcceptedCoins;
 	$scope.alert = 'INSERT COIN';
+	$scope.tray = 0;
+
+	//Get and load products
+	var products = Products;
+	$scope.products = products.inventory;
+
+
 
 
 	//process a thing "coin"
@@ -74,6 +119,7 @@ angular.module('myApp.view1', ['ngRoute'])
 			{
 				console.log("not accepted return to tray");
 				$scope.alert = 'Not accpeted tender. Check tray and INSERT COIN';
+				$scope.tray += .01
 			}
 		}
 		else
@@ -86,7 +132,68 @@ angular.module('myApp.view1', ['ngRoute'])
 
 	//Updates total amount 
 	$scope.totalAmount = function(){
+
 		return ($scope.acceptedCoins.nickels * .05) + ($scope.acceptedCoins.dimes * .10) + ($scope.acceptedCoins.quarters * .25) + ($scope.acceptedCoins.pennies * .01);
+	
+	};
+
+	$scope.returnCoins = function (){
+
+		$scope.tray += $scope.totalAmount();
+
+		$scope.acceptedCoins.dimes = 0;
+		$scope.acceptedCoins.quarters = 0;
+		$scope.acceptedCoins.nickels = 0;
+
+		$scope.alert = 'INSERT COIN';
+		$scope.totalAmount();
+
+	};
+
+	//Clear Change Tray
+	$scope.clearTray = function(){
+		$scope.tray = 0;
+	};
+
+	//Processes Vending Request
+	$scope.processVendingRequest = function(product){
+
+
+		if(product.stock < 1)
+		{
+			$scope.aler = "SOLD OUT"
+		}
+		else if($scope.totalAmount() < product.price)
+		{
+			$scope.alert = "EXACT CHANGE ONLY";
+		}
+		else
+		{
+			if (product.price%.25 == 0)
+			{
+				var multiple;
+				multiple = product.price / .25;
+				$scope.acceptedCoins.quarters -= multiple;
+			}	
+			else if (product.price%.10 == 0)
+			{
+				var multiple;
+				multiple = product.price / .10;
+				$scope.acceptedCoins.dimes -= multiple;
+			}
+			else if (product.price%.05 == 0)
+			{
+				var multiple;
+				multiple = product.price / .05;
+				$scope.acceptedCoins.nickels -= multiple;
+			}
+
+			$scope.trustedHtml = $sce.trustAsHtml(product.iFrame);
+			$scope.returnCoins();
+		}
+
+
+
 	};
 
 

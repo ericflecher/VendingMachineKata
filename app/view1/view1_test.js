@@ -23,7 +23,6 @@ describe('myApp.view1 module', function() {
   });
 
 // Accept Coins: As a vendor - https://github.com/ericflecher/VendingMachineKata#as-a-vendor
-
 describe('Scenario: Vending machine should accept coins', function() {
     var $scope, controller;
 
@@ -36,12 +35,14 @@ describe('Scenario: Vending machine should accept coins', function() {
 
         $scope.processCoin({'dia': 17.9, 'mag': 3});
         expect($scope.alert).toEqual('Accepted!');
+
     });
 
     it('Feature: Reject invalid ones (pennies) And: Rejected coins are placed in the coin return', function() {
 
         $scope.processCoin({'dia': 19.05, 'mag': 3});
         expect($scope.alert).toEqual('Not accpeted tender. Check tray and INSERT COIN');
+
     });
 
     it('Feature: When a valid coin is inserted the amount of the coin will be added to the current amount and the display will be updated.', function() {
@@ -68,6 +69,38 @@ describe('Scenario: Vending machine should accept coins', function() {
   });
 
 
+
+// Make Change: As a vendor https://github.com/ericflecher/VendingMachineKata#make-change
+describe('Scenario: I want customers to receive correct change So that they will use the vending machine again', function() {
+    var $scope, controller;
+
+    beforeEach(function() {
+      $scope = {};
+      controller = $controller('View1Ctrl', { $scope: $scope });
+    });
+
+    it('Feature: When a product is selected that costs less than the amount of money in the machine, then the remaining amount is placed in the coin return.', function() {
+
+
+        $scope.acceptedCoins.nickels = 1;
+        $scope.acceptedCoins.dimes = 2;
+        $scope.acceptedCoins.quarters = 1;
+        $scope.acceptedCoins.pennies = 0;
+
+        $scope.processVendingRequest(   {
+                                          'sku': 2,
+                                          'name': "Genisis: Invisable Touch",
+                                          'iFrame': "<iframe src=\"https://embed.spotify.com/?uri=spotify:track:0xpBr84T3FTm9j4D1MdPtk\" width=\"300\" height=\"380\" frameborder=\"0\" allowtransparency=\"true\"></iframe>",
+                                          'price': 0.10,
+                                          'stock': 2
+                                        });
+        expect($scope.tray).toEqual(.40);
+        
+    });
+
+
+
+  });
 
 
 
