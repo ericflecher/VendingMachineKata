@@ -9,20 +9,14 @@
 <button ng-click="processCoin({'dia': 21.21, 'mag': 0})">Plastic Disk</button>
 <button ng-click="processCoin({'dia': 17.9, 'mag': 1})">Steel Disk</button>
 
-
 <div>Balance: {{totalAmount() | currency:currencySymbol}}</div>
 <button ng-click="returnCoins()">Return Coins</button>
 <div>Coin Return: {{tray | currency:currencySymbol}}</div>
 <button ng-click="clearTray()">Clear Coin Return</button>
 
-
-
 <div  ng-repeat="product in products ">
-      <button ng-click="processVendingRequest(product)">{{product.price | currency:currencySymbol}}: {{product.name}}</button>
+    {{product.price | currency:currencySymbol}}(Stock: {{product.stock}}): {{product.name}}  <button ng-click="processVendingRequest(product)">Play</button>
 </div>
-
-
-
 
 <div ng-bind-html="trustedHtml"></div>
 

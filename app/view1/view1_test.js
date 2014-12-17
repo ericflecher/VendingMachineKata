@@ -128,14 +128,10 @@ describe('Scenario: I want to have my money returned So that I can change my min
     });
 
 
-
   });
 
-
-
-///////// testing the unit tests //////////
-
-  describe('$scope.grade', function() {
+// Sold Out: As a customer https://github.com/ericflecher/VendingMachineKata#as-a-customer-1
+describe('Scenario: I want to be told when the item I have selected is not available So that I can select another item', function() {
     var $scope, controller;
 
     beforeEach(function() {
@@ -143,17 +139,107 @@ describe('Scenario: I want to have my money returned So that I can change my min
       controller = $controller('View1Ctrl', { $scope: $scope });
     });
 
-    it('sets the strength to "strong" if the password length is >8 chars', function() {
-      $scope.password = 'longerthaneightchars';
-      $scope.grade();
-      expect($scope.strength).toEqual('strong');
+    it('Feature: When the item selected by the customer is out of stock, the machine displays SOLD OUT.', function() {
+
+        $scope.acceptedCoins.nickels = 1;
+        $scope.acceptedCoins.dimes = 2;
+        $scope.acceptedCoins.quarters = 1;
+        $scope.acceptedCoins.pennies = 0;
+
+        $scope.processVendingRequest(   {
+                                          'sku': 2,
+                                          'name': "Genisis: Invisable Touch",
+                                          'iFrame': "<iframe src=\"https://embed.spotify.com/?uri=spotify:track:0xpBr84T3FTm9j4D1MdPtk\" width=\"300\" height=\"380\" frameborder=\"0\" allowtransparency=\"true\"></iframe>",
+                                          'price': 0.10,
+                                          'stock': 0
+                                        });
+        expect($scope.alert).toEqual("SOLD OUT");
+
+        
     });
 
-    it('sets the strength to "weak" if the password length <3 chars', function() {
-      $scope.password = 'a';
-      $scope.grade();
-      expect($scope.strength).toEqual('weak');
+        it('Feature: When and item if purchased the stock of that item will be reduced by 1', function() {
+
+        $scope.acceptedCoins.nickels = 1;
+        $scope.acceptedCoins.dimes = 2;
+        $scope.acceptedCoins.quarters = 1;
+        $scope.acceptedCoins.pennies = 0;
+
+        $scope.processVendingRequest(   {
+                                          'sku': 2,
+                                          'name': "Genisis: Invisable Touch",
+                                          'iFrame': "<iframe src=\"https://embed.spotify.com/?uri=spotify:track:0xpBr84T3FTm9j4D1MdPtk\" width=\"300\" height=\"380\" frameborder=\"0\" allowtransparency=\"true\"></iframe>",
+                                          'price': 0.10,
+                                          'stock': 0
+                                        });
+        expect($scope.alert).toEqual("SOLD OUT");
+
+        
     });
+
+    it('Feature: If the display is checked again, it will display the amount of money remaining in the machine or INSERT COIN if there is no money in the machine.', function() {
+
+        //verify balance display
+        $scope.acceptedCoins.nickels = 4;
+        $scope.acceptedCoins.dimes = 2;
+        $scope.acceptedCoins.quarters = 1;
+        $scope.acceptedCoins.pennies = 0;
+
+        expect($scope.totalAmount()).toEqual(0.65);
+        
+
+        //verify balance display
+        $scope.acceptedCoins.nickels = 0;
+        $scope.acceptedCoins.dimes = 0;
+        $scope.acceptedCoins.quarters = 0;
+        $scope.acceptedCoins.pennies = 0;
+        expect($scope.totalAmount()).toEqual(0.00);
+        expect($scope.alert).toEqual("INSERT COIN");
+    });
+
+
+  });
+
+// Sold Out: Exact Change Only https://github.com/ericflecher/VendingMachineKata#exact-change-only
+describe('Scenario: As a customer I want to be told when exact change is required So that I can determine if I can buy something with the money I have before inserting it', function() {
+    var $scope, controller;
+
+    beforeEach(function() {
+      $scope = {};
+      controller = $controller('View1Ctrl', { $scope: $scope });
+    });
+
+    it('Feature: When a transaction is processed the machine coin balance will be updated with new coin revenue', function() {
+
+        //set a customer balance
+        $scope.acceptedCoins.nickels = 1;
+        $scope.acceptedCoins.dimes = 2;
+        $scope.acceptedCoins.quarters = 1;
+        $scope.acceptedCoins.pennies = 0;
+
+        //set a machine coin balance
+        
+
+
+        expect($scope.alert).toEqual("EXACT CHANGE ONLY");
+
+    });
+
+    it('Feature: When the machine is not able to make change with the money in the machine for any of the items that it sells, it will display EXACT CHANGE ONLY instead of INSERT COINS.', function() {
+
+        //set a customer balance
+        $scope.acceptedCoins.nickels = 1;
+        $scope.acceptedCoins.dimes = 2;
+        $scope.acceptedCoins.quarters = 1;
+        $scope.acceptedCoins.pennies = 0;
+
+        //set a machine coin balance
+
+
+        expect($scope.alert).toEqual("EXACT CHANGE ONLY");
+
+    });
+
   });
 
 

@@ -50,7 +50,7 @@ angular.module('myApp.view1', ['ngRoute'])
 	    					'name': "Genisis: Invisable Touch",
 	    					'iFrame': "<iframe src=\"https://embed.spotify.com/?uri=spotify:track:0xpBr84T3FTm9j4D1MdPtk\" width=\"300\" height=\"380\" frameborder=\"0\" allowtransparency=\"true\"></iframe>",
 	    					'price': 0.10,
-	    					'stock': 2
+	    					'stock': 1
 	    				},
 	    				{
 	    					'sku': 3,
@@ -65,9 +65,15 @@ angular.module('myApp.view1', ['ngRoute'])
 	    					'iFrame': "<iframe src=\"https://embed.spotify.com/?uri=spotify:track:1A2PWRltFrX8iB8IP3CUgo\" width=\"300\" height=\"380\" frameborder=\"0\" allowtransparency=\"true\"></iframe>",
 	    					'price': 0.55,
 	    					'stock': 4
+	    				},
+	    				{
+	    					'sku': 5,
+	    					'name': "Milky Chance: Stolen Dance",
+	    					'iFrame': "<iframe src=\"https://embed.spotify.com/?uri=spotify:track:6vECYJHxYmm3Ydt3fF01pE\" width=\"300\" height=\"380\" frameborder=\"0\" allowtransparency=\"true\"></iframe>",
+	    					'price': 0.75,
+	    					'stock': 7
 	    				}
     				]
-
 
     		};
 })
@@ -76,7 +82,7 @@ angular.module('myApp.view1', ['ngRoute'])
 .controller('View1Ctrl', ['$scope','$sce', 'Alert', 'AcceptedCoins', 'AcceptRules', 'Products', function($scope, $sce, Alert, AcceptedCoins, AcceptRules, Products) {
 
 	//set currance symbol
-	$scope.currencySymbol = 'USD$';
+	$scope.currencySymbol = '$';
 
 	$scope.alert = Alert;
 	$scope.acceptedCoins = AcceptedCoins;
@@ -161,7 +167,7 @@ angular.module('myApp.view1', ['ngRoute'])
 
 		if(product.stock < 1)
 		{
-			$scope.aler = "SOLD OUT"
+			$scope.alert = "SOLD OUT"
 		}
 		else if($scope.totalAmount() < product.price)
 		{
@@ -174,6 +180,7 @@ angular.module('myApp.view1', ['ngRoute'])
 				var multiple;
 				multiple = product.price / .25;
 				$scope.acceptedCoins.quarters -= multiple;
+
 			}	
 			else if (product.price%.10 == 0)
 			{
@@ -188,6 +195,7 @@ angular.module('myApp.view1', ['ngRoute'])
 				$scope.acceptedCoins.nickels -= multiple;
 			}
 
+			$scope.reduceStock(product);
 			$scope.trustedHtml = $sce.trustAsHtml(product.iFrame);
 			$scope.returnCoins();
 		}
@@ -196,25 +204,22 @@ angular.module('myApp.view1', ['ngRoute'])
 
 	};
 
+	$scope.reduceStock = function(product){
+
+		var i = 0;
+		  $scope.products.forEach(function(p) {
+
+		  	if(p.sku == product.sku)
+		  	{
+		  		$scope.products[i].stock -= 1;
+		  	}
+
+		  	i++;
+
+		  });
+	};
 
 
-
-
-	///////// Unit test test //////
-
-	$scope.password = '';
-	  $scope.grade = function() {
-	    var size = $scope.password.length;
-	    if (size > 8) {
-	      $scope.strength = 'strong';
-	    } else if (size > 3) {
-	      $scope.strength = 'medium';
-	    } else {
-	      $scope.strength = 'weak';
-	    }
-	 };
-
-	 /////////Unit test test end ////
 
 
 }]);
