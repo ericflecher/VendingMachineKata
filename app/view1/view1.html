@@ -1,6 +1,8 @@
 
 <h1>Hack Tunes Kata</h1>
-{{alert}}
+<p>{{alert}}</p>
+
+<p>Machine Coin Balance: {{coinBalance}}, {{totalAmount(coinBalance) | currency:currencySymbol}}</p>
 
 <button ng-click="processCoin({'dia': 19.05, 'mag': 3})">Penny</button>
 <button ng-click="processCoin({'dia': 21.21, 'mag': 3})">Nickel</button>
@@ -9,13 +11,13 @@
 <button ng-click="processCoin({'dia': 21.21, 'mag': 0})">Plastic Disk</button>
 <button ng-click="processCoin({'dia': 17.9, 'mag': 1})">Steel Disk</button>
 
-<div>Balance: {{totalAmount() | currency:currencySymbol}}</div>
+<div>Balance: {{totalAmount(acceptedCoins) | currency:currencySymbol}}</div>
 <button ng-click="returnCoins()">Return Coins</button>
 <div>Coin Return: {{tray | currency:currencySymbol}}</div>
 <button ng-click="clearTray()">Clear Coin Return</button>
 
 <div  ng-repeat="product in products ">
-    {{product.price | currency:currencySymbol}}(Stock: {{product.stock}}): {{product.name}}  <button ng-click="processVendingRequest(product)">Play</button>
+    {{product.price | currency:currencySymbol}}(Stock: {{product.stock}}): {{product.name}}  <button ng-click="processVendingRequest(product)">Buy Play</button>
 </div>
 
 <div ng-bind-html="trustedHtml"></div>

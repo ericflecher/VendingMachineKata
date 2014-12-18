@@ -52,7 +52,7 @@ describe('Scenario: Vending machine should accept coins', function() {
       $scope.acceptedCoins.quarters = 4;
       $scope.acceptedCoins.pennies = 0;
 
-      expect($scope.totalAmount()).toEqual(1.25);
+      expect($scope.totalAmount($scope.acceptedCoins)).toEqual(1.25);
     });
 
     it('When: there are no coins inserted, the machine displays INSERT COIN. Rejected coins are placed in the coin return.', function() {
@@ -81,11 +81,16 @@ describe('Scenario: I want customers to receive correct change So that they will
 
     it('Feature: When a product is selected that costs less than the amount of money in the machine, then the remaining amount is placed in the coin return.', function() {
 
-
+        //Set customer balance
         $scope.acceptedCoins.nickels = 1;
         $scope.acceptedCoins.dimes = 2;
         $scope.acceptedCoins.quarters = 1;
         $scope.acceptedCoins.pennies = 0;
+
+        //set a machine coin balance
+        $scope.coinBalance.dimes = 10;
+        $scope.coinBalance.quarters = 10;
+        $scope.coinBalance.nickels = 10;
 
         $scope.processVendingRequest(   {
                                           'sku': 2,
@@ -94,7 +99,8 @@ describe('Scenario: I want customers to receive correct change So that they will
                                           'price': 0.10,
                                           'stock': 2
                                         });
-        expect($scope.tray).toEqual(.40);
+
+        expect($scope.tray).toEqual(0.40);
         
     });
 
@@ -158,7 +164,7 @@ describe('Scenario: I want to be told when the item I have selected is not avail
         
     });
 
-        it('Feature: When and item if purchased the stock of that item will be reduced by 1', function() {
+        it('Feature: When and item if purchased the stock of that item will be reduced by 1.', function() {
 
         $scope.acceptedCoins.nickels = 1;
         $scope.acceptedCoins.dimes = 2;
@@ -185,7 +191,7 @@ describe('Scenario: I want to be told when the item I have selected is not avail
         $scope.acceptedCoins.quarters = 1;
         $scope.acceptedCoins.pennies = 0;
 
-        expect($scope.totalAmount()).toEqual(0.65);
+        expect($scope.totalAmount($scope.acceptedCoins)).toEqual(0.65);
         
 
         //verify balance display
@@ -193,7 +199,7 @@ describe('Scenario: I want to be told when the item I have selected is not avail
         $scope.acceptedCoins.dimes = 0;
         $scope.acceptedCoins.quarters = 0;
         $scope.acceptedCoins.pennies = 0;
-        expect($scope.totalAmount()).toEqual(0.00);
+        expect($scope.totalAmount($scope.acceptedCoins)).toEqual(0.00);
         expect($scope.alert).toEqual("INSERT COIN");
     });
 
@@ -211,30 +217,44 @@ describe('Scenario: As a customer I want to be told when exact change is require
 
     it('Feature: When a transaction is processed the machine coin balance will be updated with new coin revenue', function() {
 
-        //set a customer balance
-        $scope.acceptedCoins.nickels = 1;
-        $scope.acceptedCoins.dimes = 2;
-        $scope.acceptedCoins.quarters = 1;
+                //set a customer balance
+        $scope.acceptedCoins.nickels = 0;
+        $scope.acceptedCoins.dimes = 0;
+        $scope.acceptedCoins.quarters = 0;
         $scope.acceptedCoins.pennies = 0;
 
         //set a machine coin balance
-        
+        $scope.coinBalance.dimes = 0;
+        $scope.coinBalance.quarters = 0;
+        $scope.coinBalance.nickels = 0;
+
+        $scope.processCoin({'dia': 24.26, 'mag': 3}); 
 
 
-        expect($scope.alert).toEqual("EXACT CHANGE ONLY");
+        expect($scope.totalAmount($scope.coinBalance)).toEqual(0.25);
 
     });
 
     it('Feature: When the machine is not able to make change with the money in the machine for any of the items that it sells, it will display EXACT CHANGE ONLY instead of INSERT COINS.', function() {
 
         //set a customer balance
-        $scope.acceptedCoins.nickels = 1;
-        $scope.acceptedCoins.dimes = 2;
+        $scope.acceptedCoins.nickels = 0;
+        $scope.acceptedCoins.dimes = 0;
         $scope.acceptedCoins.quarters = 1;
         $scope.acceptedCoins.pennies = 0;
 
         //set a machine coin balance
+        $scope.coinBalance.dimes = 0;
+        $scope.coinBalance.quarters = 0;
+        $scope.coinBalance.nickels = 0;
 
+        $scope.processVendingRequest(   {
+                          'sku': 2,
+                          'name': "Genisis: Invisable Touch",
+                          'iFrame': "<iframe src=\"https://embed.spotify.com/?uri=spotify:track:0xpBr84T3FTm9j4D1MdPtk\" width=\"300\" height=\"380\" frameborder=\"0\" allowtransparency=\"true\"></iframe>",
+                          'price': 0.10,
+                          'stock': 5
+                        });
 
         expect($scope.alert).toEqual("EXACT CHANGE ONLY");
 
