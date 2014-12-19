@@ -301,9 +301,11 @@ angular.module('myApp.view1', ['ngRoute'])
 		var remaining = c;
 		console.log ("total change remaining: " + remaining);
 		var changed = (remaining/100);
+    $scope.revertChangeQuarters = $scope.acceptedCoins.quarters;
+    $scope.revertChangeDimes = $scope.acceptedCoins.dimes;
+    $scope.revertChangeNickels = $scope.acceptedCoins.nickels;
 
 		//Reduce machine balance
-
 		while (remaining > 0)
 		{	
 
@@ -318,6 +320,7 @@ angular.module('myApp.view1', ['ngRoute'])
 				console.log("quarter change");
 				$scope.coinBalance.quarters -= 1;
 				$scope.acceptedCoins.quarters -= 1;
+       // $scope.revertChangeQuarters += 1;
 				forceFalse = 0;
 			
 				
@@ -330,6 +333,7 @@ angular.module('myApp.view1', ['ngRoute'])
 				console.log("dime change");
 				$scope.coinBalance.dimes -= 1;
 				$scope.acceptedCoins.dimes -= 1;
+       // $scope.revertChangeDimes += 1;
 				forceFalse = 0;
 				
 		
@@ -340,13 +344,29 @@ angular.module('myApp.view1', ['ngRoute'])
 				console.log("nickel change");
 				$scope.coinBalance.nickels -= 1;
 				$scope.acceptedCoins.nickels -= 1;
+       // $scope.revertChangeNickels += 1;
 				remaining -= 5;
 				forceFalse = 0;
 				
 
 			}
-			else if (forceFalse = 1)
+			else if (forceFalse == 1)
 			{
+        console.log("revert");
+        //revert changes and return false
+        $scope.coinBalance.quarters = $scope.revertChangeQuarters;
+		$scope.acceptedCoins.quarters = $scope.revertChangeQuarters;
+        $scope.coinBalance.dimes = $scope.revertChangeDimes;
+		$scope.acceptedCoins.dimes = $scope.revertChangeDimes;
+        $scope.coinBalance.nickels = $scope.revertChangeNickels;
+		$scope.acceptedCoins.nickels = $scope.revertChangeNickels;
+        
+        //reset revert 
+        $scope.revertChangeQuarters = 0;
+        $scope.revertChangeDimes = 0;
+        $scope.revertChangeNickels = 0;
+        
+        
 				return false;
 			}
 			console.log("change remaining: " + remaining);
